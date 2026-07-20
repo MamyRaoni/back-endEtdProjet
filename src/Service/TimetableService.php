@@ -9,7 +9,6 @@ class TimetableService
 
     public function generateTimetable($classe, array $study_days, array &$schedule = [], string $semestre, array &$tour_matiere=[]): bool
 {
-    dump("debut de generatetimetable");
      
      $matieres = $classe->getMatieres()->toArray();
       // Initialisation de $tour_matiere si c'est le premier appel
@@ -23,7 +22,6 @@ class TimetableService
         $matiere = $matieres[$matiere_index];
         //$tour_matiere[$matiere_index]=$matiere->getVolumeHoraireRestant();
 
-        dump("Traitement de la matière : " . $matiere->getLibelle());
         if ($matiere->getSemestre() != $semestre) {
             continue;
         }
@@ -33,10 +31,7 @@ class TimetableService
         }
         
         foreach ($study_days as $day) {
-            dump("le jour de : ".$day);
             foreach ($this->getAvailableSlots($day) as $slot) {
-                dump("le slot d'heure : ");
-                dump($slot);
                 if ($this->isClassBusy($classe->getId(), $day, $slot['heure_debut'], $slot['heure_fin'], $schedule)) {
                     continue; // Passer au créneau suivant si la classe est occupée
                 }
@@ -44,7 +39,6 @@ class TimetableService
                 $prof = $this->findAvailableProf($day, $slot['heure_debut'], $slot['heure_fin'], $contraintes, $schedule, $slot);
                 
                 if ($prof) {
-                    dump("le prof selectionne : ".$prof->getNom());
                     $tour_matiere[$matiere_index]++;
                     $schedule[] = [
                         'classe_id' => $classe->getId(),
@@ -59,10 +53,8 @@ class TimetableService
                         'heure_fin' => $slot['heure_fin']
                     ];
                     if ($this->generateTimetable($classe, $study_days, $schedule,$semestre,$tour_matiere)) {
-                        dump("tafiditra amin'ny if alohan'ny farany");
                         return true;
                     }
-                    dump("effacement de schedule");
                     array_pop($schedule);
                     // Condition de terminaison pour les matières
                     if ($matiere_index >= count($matieres) - 1) {

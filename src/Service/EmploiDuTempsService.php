@@ -71,7 +71,6 @@ class EmploiDuTempsService
                                 'heure_fin' => $slot['heure_fin'],
                                 'salle'=>$sallePrevue->getNumero()
                             ];
-                            dump($schedule);
                             if($this->generateTimetable($classe, $study_days, $schedule, $semestre, $tour_matiere,$salles,$tablEdt,$testTour1,$matieres)){
                                 return true;
                             }

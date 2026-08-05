@@ -1,0 +1,9 @@
+name: deploy.yml
+on:
+  push:
+    branches:
+      - main
+
+env:
+  IMAGE_NAME:
+jobs:
